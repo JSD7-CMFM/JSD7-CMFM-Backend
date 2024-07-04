@@ -42,7 +42,7 @@ const usersController = {
     try {
       const id = req.params;
       const data = req.body;
-      await userServices.updateUsers(id, data);
+      await userService.updateUser(id, data);
       return res.status(200).json({ message: "update successful" });
     } catch (error) {
       console.error("Error in Update Product:", error);
