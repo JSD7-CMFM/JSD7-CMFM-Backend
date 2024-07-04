@@ -10,8 +10,10 @@ await mongoose.connect(
 );
 
 
-
+app.use(express.json());
 app.use("/api-services", router);
+
+
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
