@@ -36,7 +36,7 @@ export const updateProducts = async (req, res, next) => {
     try {
         const id = req.params
         const data = req.body
-        const product = await productServices.updateProduct(id,data);
+        await productServices.updateProduct(id,data);
         return res.status(200).json({ message: "update successful"});
     } catch (error) {
         console.error("Error in Update Product:", error);
