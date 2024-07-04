@@ -10,6 +10,10 @@ const userService = {
     return await Users.create(data);
   },
 
+  // async loginUser(data) {
+  //   return data
+  // }
+
   async getUserById(id) {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       throw new Error("Invalid ID format");
@@ -18,18 +22,17 @@ const userService = {
     return await Users.findById(objectId);
   },
 
-  //   async getUserByEmail(email) {
-  //     return await Users.findUnique({ where: { email } });
-  //   },
+  async updateUser(id, data) {
+    const newId = new mongoose.Types.ObjectId(id);
+    const response = await Products.findByIdAndUpdate(newId, data);
+    return response;
+  },
 
-  //   async updateUser(id, data) {
-  //     return await Users.update({ where: { id }, data });
-  //   },
-
-  //   async deleteUser(id) {
-  //     return await Users.delete({ where: { id } });
-  //   },
-  //
+  async deleteUser(id, data) {
+    const newId = new mongoose.Types.ObjectId(id);
+    const response = await Products.findByIdAndDelete(newId, data);
+    return response;
+  },
 };
 
 export default userService;
