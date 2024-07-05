@@ -24,13 +24,13 @@ const userService = {
 
   async updateUser(id, data) {
     const newId = new mongoose.Types.ObjectId(id);
-    const response = await Products.findByIdAndUpdate(newId, data);
+    const response = await Users.findByIdAndUpdate(newId, data);
     return response;
   },
 
   async deleteUser(id, data) {
     const newId = new mongoose.Types.ObjectId(id);
-    const response = await Products.findByIdAndDelete(newId, data);
+    const response = await Users.findByIdAndDelete(newId, data);
     return response;
   },
 };
