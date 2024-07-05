@@ -1,14 +1,12 @@
 import express from "express";
-import {
-  getOrders,
-  getOrder,
-  updateOrder,
-} from "../controllers/ordersController.js";
+import orderController from "../controllers/ordersController.js";
 
-const orderRouter = express.Router();
+const C = orderController;
 
-orderRouter.get("/", getOrders);
-orderRouter.get("/:id", getOrder);
-orderRouter.patch("/:id", updateOrder);
+const orderRoute = express.Router();
 
-export default orderRouter;
+orderRoute.get("/", C.getOrders);
+orderRoute.get("/:id", C.getOrder);
+orderRoute.patch("/:id", C.updateOrder);
+
+export default orderRoute;
