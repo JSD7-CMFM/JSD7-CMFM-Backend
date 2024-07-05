@@ -1,4 +1,6 @@
 import userService from "../services/usersServices.js";
+import utils from "../utils/index.js";
+import * as jwt from "../utils/jwt.js";
 
 const usersController = {
   getUsers: async (req, res, next) => {
@@ -31,9 +33,16 @@ const usersController = {
 
   createUser: async (req, res, next) => {
     try {
+      const hashed = await utils.bcrypt.hashed(req.body.password);
+      req.body.password = hashed;
       const data = req.body;
       const user = await userService.createUser(data);
-      res.status(201).json({ message: "Create User", data: user });
+      delete user.password;
+      console.log(user)
+      const token = jwt.sign(user);
+      res
+        .status(201)
+        .json({ message: "Create User", data: user, accessToken: token });
     } catch (error) {
       next(error);
     }
