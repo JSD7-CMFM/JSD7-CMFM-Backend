@@ -1,5 +1,6 @@
 import userService from "../services/usersServices.js";
 import utils from "../utils/index.js";
+import { CreateCustomError } from "../config/error.js";
 import * as jwt from "../utils/jwt.js";
 
 const usersController = {
@@ -21,15 +22,13 @@ const usersController = {
       next(error);
     }
   },
-
-  loginUser: async (req, res, next) => {
-    try {
-      const user = req.body;
-      res.status(200).json({ message: "Login Successful", data: user });
-    } catch (error) {
-      next(error);
-    }
-  },
+  
+    // try {
+    //   const user = req.body;
+    //   res.status(200).json({ message: "Login Successful", data: user });
+    // } catch (error) {
+    //   next(error);
+    // }
 
   createUser: async (req, res, next) => {
     try {
@@ -38,11 +37,10 @@ const usersController = {
       const data = req.body;
       const user = await userService.createUser(data);
       delete user.password;
-      console.log(typeof user)
       const token = jwt.sign(user.toObject());
       res
         .status(201)
-        .json({ message: "Create User", data: user, token: token});
+        .json({ message: "Create User", data: user, token: token });
     } catch (error) {
       next(error);
     }
