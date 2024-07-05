@@ -7,8 +7,6 @@ const usersSchema = new mongoose.Schema({
 //   lastName: { type: String, require: true },
 //   phoneNumber: { type: String, require: true },
 //   address: { type: String },
-  
-  
 });
 
 export const Users = mongoose.model("Users", usersSchema, "users");

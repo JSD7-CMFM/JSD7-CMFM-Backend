@@ -1,13 +1,12 @@
+import 'dotenv/config';
 import express from "express";
 import router from "./src/routes/index.js";
 import mongoose from "mongoose";
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT;
 
-await mongoose.connect(
-  "mongodb+srv://Admin_S:cmfm1234@cmfm.fyrm4ye.mongodb.net/CMFM"
-);
+await mongoose.connect(process.env.MONGO_URI);
 
 
 app.use("/api-services", router);
