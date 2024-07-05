@@ -30,4 +30,4 @@ const productServices = {
         return response;
     }
 };
-export { productServices };
+export default productServices ;
