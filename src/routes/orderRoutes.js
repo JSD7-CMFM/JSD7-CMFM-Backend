@@ -5,10 +5,10 @@ import {
   updateOrder,
 } from "../controllers/ordersController.js";
 
-const router = express.Router();
+const orderRouter = express.Router();
 
-router.get("/orders", getOrders);
-router.get("/orders/:id", getOrder);
-router.patch("/orders/:id", updateOrder);
+orderRouter.get("/", getOrders);
+orderRouter.get("/:id", getOrder);
+orderRouter.patch("/:id", updateOrder);
 
-export default router;
+export default orderRouter;

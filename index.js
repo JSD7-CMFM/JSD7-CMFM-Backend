@@ -1,5 +1,7 @@
 import express from "express";
 import router from "./src/routes/userRoutes.js";
+import orderRouter from "./src/routes/orderRoutes.js";
+
 import mongoose from "mongoose";
 
 const app = express();
@@ -10,6 +12,7 @@ await mongoose.connect(
 );
 app.use(express.json());
 app.use("/api-services", router);
+app.use("/orders", orderRouter);
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
