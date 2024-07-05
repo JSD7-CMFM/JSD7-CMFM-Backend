@@ -1,21 +1,22 @@
 import mongoose from "mongoose";
 
-const ordersSchema = new mongoose.Schema({
-  user_id: { type: mongoose.Schema.Types.ObjectId, required: true },
-  cart_products: [
-    {
-      product_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
+const ordersSchema = new mongoose.Schema(
+  {
+    user_id: { type: mongoose.Schema.Types.ObjectId, required: true },
+    cart_products: [
+      {
+        product_id: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: true,
+        },
+        amount: { type: Number, required: true },
       },
-      amount: { type: Number, required: true },
-    },
-  ],
-  total_price: { type: Number, required: true },
-  status: { type: String, required: true, unique: true },
-  address: { type: String, required: true, unique: true },
-  created_at: { type: Date, default: Date.now },
-  updated_at: { type: Date, default: Date.now },
-});
+    ],
+    total_price: { type: Number, required: true },
+    status: { type: String, required: true, unique: true },
+    address: { type: String, required: true, unique: true },
+  },
+  { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
+);
 
 export const Orders = mongoose.model("Orders", ordersSchema, "orders");
