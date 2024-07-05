@@ -35,8 +35,15 @@ const usersController = {
         error.statusCode = 401;
         return next(error);
       }
-      const token = utils.jwt.sign(user.toObject());
-      return res.status(200).json({ message: "Login Successful", token });
+      const token = utils.jwt.sign(
+        {
+          id: user._id,
+          email: user.email,
+          isAdmin: user.isAdmin
+        }
+      );
+      // const token = utils.jwt.sign(user.toObject());
+      return res.status(200).json({ message: "Login Successful", token: token });
     } catch (error) {
       next(error);
     }
