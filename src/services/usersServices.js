@@ -10,9 +10,10 @@ const userService = {
     return await Users.create(data);
   },
 
-  // async loginUser(data) {
-  //   return data
-  // }
+  //use to verify login
+  async findByEmail(email) {
+    return await Users.findOne({ email });
+  },
 
   async getUserById(id) {
     if (!mongoose.Types.ObjectId.isValid(id)) {
