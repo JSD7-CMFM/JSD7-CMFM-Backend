@@ -38,11 +38,11 @@ const usersController = {
       const data = req.body;
       const user = await userService.createUser(data);
       delete user.password;
-      console.log(user)
-      const token = jwt.sign(user);
+      console.log(typeof user)
+      const token = jwt.sign(user.toObject());
       res
         .status(201)
-        .json({ message: "Create User", data: user, accessToken: token });
+        .json({ message: "Create User", data: user, token: token});
     } catch (error) {
       next(error);
     }
