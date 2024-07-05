@@ -12,8 +12,8 @@ const ordersSchema = new mongoose.Schema({
     },
   ],
   total_price: { type: Number, required: true },
-  status: { type: String, require: true, unique: true },
-  address: { type: String, require: true, unique: true },
+  status: { type: String, required: true, unique: true },
+  address: { type: String, required: true, unique: true },
   created_at: { type: Date, default: Date.now },
   updated_at: { type: Date, default: Date.now },
 });

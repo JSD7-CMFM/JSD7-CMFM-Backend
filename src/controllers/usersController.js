@@ -32,7 +32,9 @@ const usersController = {
   createUser: async (req, res, next) => {
     try {
       const data = req.body;
+      console.log(data);
       const user = await userService.createUser(data);
+      console.log(user);
       res.status(201).json({ message: "Create User", data: user });
     } catch (error) {
       next(error);
