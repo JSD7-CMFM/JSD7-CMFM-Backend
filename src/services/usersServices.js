@@ -1,11 +1,38 @@
+import { mongoose } from "mongoose";
 import { Users } from "../models/usersModel.js";
-const getAllUsers = async () => {
-  try {
-    const response = await Users.find();
+
+const userService = {
+  async getAllUsers() {
+    return await Users.find();
+  },
+
+  async createUser(data) {
+    return await Users.create(data);
+  },
+
+  // async loginUser(data) {
+  //   return data
+  // }
+
+  async getUserById(id) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new Error("Invalid ID format");
+    }
+    const objectId = new mongoose.Types.ObjectId(id);
+    return await Users.findById(objectId);
+  },
+
+  async updateUser(id, data) {
+    const newId = new mongoose.Types.ObjectId(id);
+    const response = await Products.findByIdAndUpdate(newId, data);
     return response;
-  } catch (error) {
-    console.log(error);
-  }
+  },
+
+  async deleteUser(id, data) {
+    const newId = new mongoose.Types.ObjectId(id);
+    const response = await Products.findByIdAndDelete(newId, data);
+    return response;
+  },
 };
 
-export { getAllUsers };
+export default userService;
