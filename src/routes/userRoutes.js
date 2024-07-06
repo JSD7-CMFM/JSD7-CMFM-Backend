@@ -1,13 +1,14 @@
 import express from "express";
 import usersController from "../controllers/usersController.js";
+import authenticate from "../middlewares/authenticate.js";
 
-const C = usersController
+const C = usersController;
 
 const userRoute = express.Router();
 
 userRoute.get("/", C.getUsers);
 
-userRoute.get("/:id", C.getUserById);
+userRoute.get("/:id", authenticate, C.getUserById);
 
 userRoute.post("/register", C.createUser);
 
@@ -18,3 +19,7 @@ userRoute.patch("/:id", C.updateUsers);
 userRoute.delete("/:id", C.deleteUsers);
 
 export default userRoute;
+
+//check token 1
+// query email in data base if user.email == database.email
+//

@@ -35,21 +35,22 @@ const usersController = {
         error.statusCode = 401;
         return next(error);
       }
-      const token = utils.jwt.sign(
-        {
-          id: user._id,
-          email: user.email,
-          isAdmin: user.isAdmin
-        }
-      );
+      const token = utils.jwt.sign({
+        id: user._id,
+        email: user.email,
+        isAdmin: user.isAdmin,
+      });
       // const token = utils.jwt.sign(user.toObject());
-      return res.status(200).json({ message: "Login Successful", token: token });
+      return res
+        .status(200)
+        .json({ message: "Login Successful", token: token });
     } catch (error) {
       next(error);
     }
   },
 
   createUser: async (req, res, next) => {
+    console.log(req.body);
     try {
       const hashedPassword = await utils.bcrypt.hashed(req.body.password);
       req.body.password = hashedPassword;
@@ -59,9 +60,11 @@ const usersController = {
         error.statusCode = 400;
         return next(error);
       }
-      delete user.password;
-      console.log(user);
-      const token = utils.jwt.sign(user.toObject());
+      const token = utils.jwt.sign({
+        id: user._id,
+        isAdmin: user.isAdmin,
+        email: user.email,
+      });
       return res
         .status(201)
         .json({ message: "User Created", data: user, token });
