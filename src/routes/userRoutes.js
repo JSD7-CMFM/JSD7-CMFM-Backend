@@ -1,7 +1,8 @@
 import express from "express";
 import usersController from "../controllers/usersController.js";
+import authenticate from "../middlewares/authenticate.js";
 
-const C = usersController
+const C = usersController;
 
 const userRoute = express.Router();
 
