@@ -20,6 +20,15 @@ getOrderById : async (id) => {
   }
 },
 
+createOrder : async (data) => {
+  try {
+    const response = await Orders.create(data);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+},
+
 updateOrderById : async (id, updateData) => {
   try {
     const newId = new mongoose.Types.ObjectId(id);
