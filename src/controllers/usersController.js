@@ -1,10 +1,11 @@
 import userService from "../services/usersServices.js";
+import utils from "../utils/index.js";
 
 const usersController = {
   getUsers: async (req, res, next) => {
     try {
       const data = await userService.getAllUsers();
-      res.status(200).json({ message: "Get All Users", data: data });
+      return res.status(200).json({ message: "Get All Users", data: data });
     } catch (error) {
       next(error);
     }
@@ -14,7 +15,12 @@ const usersController = {
     try {
       const { id } = req.params;
       const user = await userService.getUserById(id);
-      res.status(200).json({ message: "Get User By ID", data: user });
+      if (!user) {
+        const error = new Error("User not found");
+        error.statusCode = 404;
+        return next(error);
+      }
+      return res.status(200).json({ message: "Get User By ID", data: user });
     } catch (error) {
       next(error);
     }
@@ -22,46 +28,81 @@ const usersController = {
 
   loginUser: async (req, res, next) => {
     try {
-      const user = req.body;
-      res.status(200).json({ message: "Login Successful", data: user });
+      const { email, password } = req.body;
+      const user = await userService.findByEmail(email);
+      if (!user || !(await utils.bcrypt.compare(password, user.password))) {
+        const error = new Error("Invalid email or password");
+        error.statusCode = 401;
+        return next(error);
+      }
+      const token = utils.jwt.sign({
+        id: user._id,
+        email: user.email,
+        isAdmin: user.isAdmin,
+      });
+      // const token = utils.jwt.sign(user.toObject());
+      return res
+        .status(200)
+        .json({ message: "Login Successful", token: token });
     } catch (error) {
       next(error);
     }
   },
 
   createUser: async (req, res, next) => {
+    console.log(req.body);
     try {
-      const data = req.body;
-      const user = await userService.createUser(data);
-      res.status(201).json({ message: "Create User", data: user });
+      const hashedPassword = await utils.bcrypt.hashed(req.body.password);
+      req.body.password = hashedPassword;
+      const user = await userService.createUser(req.body);
+      if (!user) {
+        const error = new Error("User creation failed");
+        error.statusCode = 400;
+        return next(error);
+      }
+      const token = utils.jwt.sign({
+        id: user._id,
+        isAdmin: user.isAdmin,
+        email: user.email,
+      });
+      return res
+        .status(201)
+        .json({ message: "User Created", data: user, token });
     } catch (error) {
       next(error);
     }
   },
+
   updateUsers: async (req, res, next) => {
     try {
-      const id = req.params;
+      const { id } = req.params;
       const data = req.body;
-      await userService.updateUser(id, data);
-      return res.status(200).json({ message: "update successful" });
+      const user = await userService.updateUser(id, data);
+      if (!user) {
+        const error = new Error("User not found");
+        error.statusCode = 404;
+        return next(error);
+      }
+      return res.status(200).json({ message: "Update successful" });
     } catch (error) {
-      console.error("Error in Update Product:", error);
-      return res.status(500).json({ message: "Internal server error" });
+      next(error);
     }
   },
 
   deleteUsers: async (req, res, next) => {
     try {
-      const id = req.params;
-      await userService.deleteUser(id);
-      return res.status(200).json({ message: "delete successful" });
+      const { id } = req.params;
+      const user = await userService.deleteUser(id);
+      if (!user) {
+        const error = new Error("User not found");
+        error.statusCode = 404;
+        return next(error);
+      }
+      return res.status(200).json({ message: "Delete successful" });
     } catch (error) {
-      console.error("Error in Update Product:", error);
-      return res.status(500).json({ message: "Internal server error" });
+      next(error);
     }
   },
 };
 
 export default usersController;
-
-// export { getUsers, getUserById, createUser, updateUsers, deleteUsers };

@@ -13,12 +13,10 @@ const ordersSchema = new mongoose.Schema(
       },
     ],
     total_price: { type: Number, required: true },
-    status: { type: String, require: true, unique: true },
-    address: { type: String, require: true, unique: true },
+    status: { type: String, required: true, unique: true },
+    address: { type: String, required: true, unique: true },
   },
-  {
-    timestamps: { createdAt: "created_at", updatedAt: "updated_at" },
-  }
+  { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
 );
 
 export const Orders = mongoose.model("Orders", ordersSchema, "orders");
