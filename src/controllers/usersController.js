@@ -1,3 +1,4 @@
+import { Users } from "../models/usersModel.js";
 import userService from "../services/usersServices.js";
 import utils from "../utils/index.js";
 
@@ -59,6 +60,14 @@ const usersController = {
     try {
       const hashedPassword = await utils.bcrypt.hashed(req.body.password);
       req.body.password = hashedPassword;
+      if (req.body.email) {
+        const emailDupe = await Users.findOne({ email: req.body.email });
+        if (emailDupe) {
+          const error = new Error("Email already exists");
+          error.statusCode = 409;
+          return next(error);
+        }
+      }
       const user = await userService.createUser(req.body);
       if (!user) {
         const error = new Error("User creation failed");
@@ -72,7 +81,13 @@ const usersController = {
       });
       return res
         .status(201)
-        .json({ message: "User Created", data: user, token });
+        .json({
+          message: "User Created",
+          email: user.email,
+          id: user._id,
+          firstName: user.firstName,
+          token,
+        });
     } catch (error) {
       next(error);
     }

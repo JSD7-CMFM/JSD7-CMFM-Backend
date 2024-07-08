@@ -14,7 +14,7 @@ userRoute.post("/register", C.createUser);
 
 userRoute.post("/login", C.loginUser);
 
-userRoute.patch("/:id", C.updateUsers);
+userRoute.patch("/:id", authenticate, C.updateUsers);
 
 userRoute.delete("/:id", C.deleteUsers);
 

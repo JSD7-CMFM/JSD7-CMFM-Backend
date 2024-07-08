@@ -20,7 +20,7 @@ const userService = {
       throw new Error("Invalid ID format");
     }
     const objectId = new mongoose.Types.ObjectId(id);
-    return await Users.findById(objectId);
+    return await Users.findById(objectId).select("-password");
   },
 
   async updateUser(id, data) {
