@@ -7,6 +7,7 @@ const usersSchema = new mongoose.Schema(
     firstName: { type: String, require: true },
     lastName: { type: String, require: true },
     phoneNumber: { type: String },
+    status: { type: String , default: "active"},
     isAdmin: { type: Boolean, default: false },
   },
   {
