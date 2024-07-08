@@ -30,6 +30,7 @@ const usersController = {
     try {
       const { email, password } = req.body;
       const user = await userService.findByEmail(email);
+
       if (!user || !(await utils.bcrypt.compare(password, user.password))) {
         const error = new Error("Invalid email or password");
         error.statusCode = 401;
@@ -41,9 +42,13 @@ const usersController = {
         isAdmin: user.isAdmin,
       });
       // const token = utils.jwt.sign(user.toObject());
-      return res
-        .status(200)
-        .json({ message: "Login Successful", token: token });
+      return res.status(200).json({
+        message: "Login Successful",
+        email: user.email,
+        id: user._id,
+        firstName: user.firstName,
+        token: token,
+      });
     } catch (error) {
       next(error);
     }
