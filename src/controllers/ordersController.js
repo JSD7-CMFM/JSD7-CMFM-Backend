@@ -25,6 +25,15 @@ const orderController = {
     }
   },
 
+  createOrder: async (req, res, next) => {
+    try {
+      const data = await orderService.createOrder(req.body);
+      return res.status(201).json({ message: "Order created", data });
+    } catch (error) {
+      next(error);
+    }
+  },
+
   updateOrder: async (req, res, next) => {
     try {
       const { id } = req.params;
