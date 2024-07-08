@@ -15,13 +15,13 @@ const authenticate = async (req, res, next) => {
     const authorization = req.headers?.authorization.startsWith("Bearer")
       ? req.headers.authorization
       : next(new Error("Not found Bearer token", "InvalidToken", 400));
-    console.log("authorization", authorization);
+
     const token = authorization.split(" ")[1]
       ? authorization.split(" ")[1]
       : next(new Error("Not found Bearer token", "InvalidToken", 400));
-    // console.log("token", token);
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY || "key");
-    // console.log("decoded", decoded);
+
     if (!mongoose.Types.ObjectId.isValid(decoded.id)) {
       throw new Error("Invalid ID format", "InvalidID", 400);
     }
@@ -35,7 +35,6 @@ const authenticate = async (req, res, next) => {
     // }
 
     req.user = user;
-    // console.log("req.user", req.user);
     next();
   } catch (err) {
     next(err);
