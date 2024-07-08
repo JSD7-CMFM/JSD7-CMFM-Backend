@@ -1,5 +1,6 @@
 import { mongoose } from "mongoose";
 import { Users } from "../models/usersModel.js";
+import utils from "../utils/index.js";
 
 const userService = {
   async getAllUsers() {

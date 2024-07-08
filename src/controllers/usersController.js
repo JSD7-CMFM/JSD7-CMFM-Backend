@@ -15,7 +15,6 @@ const usersController = {
   getUserById: async (req, res, next) => {
     try {
       const { id } = req.params;
-      console.log(req);
       const user = await userService.getUserById(id);
       if (!user) {
         const error = new Error("User not found");
@@ -56,10 +55,10 @@ const usersController = {
   },
 
   createUser: async (req, res, next) => {
-    console.log(req.body);
     try {
       const hashedPassword = await utils.bcrypt.hashed(req.body.password);
       req.body.password = hashedPassword;
+
       if (req.body.email) {
         const emailDupe = await Users.findOne({ email: req.body.email });
         if (emailDupe) {
@@ -69,6 +68,7 @@ const usersController = {
         }
       }
       const user = await userService.createUser(req.body);
+
       if (!user) {
         const error = new Error("User creation failed");
         error.statusCode = 400;
@@ -101,23 +101,15 @@ const usersController = {
         error.statusCode = 404;
         return next(error);
       }
-      console.log(data.password);
-      console.log(user);
       const isPasswordCorrect = await utils.bcrypt.compare(
         data.password,
-        "$2b$10$tr4uSmRqCDPj8VnFtTZ3AuMXJe2f3mUON5sxcnf6AZqZGudv2SbWS"
+        user.password
       );
-      console.log(isPasswordCorrect);
       if (!isPasswordCorrect) {
         const error = new Error("Password is incorrect");
         error.statusCode = 401;
         return next(error);
       }
-
-      // if (data.password) {
-      //   const hashedPassword = await bcrypt.hash(data.password, 10);
-      //   data.password = hashedPassword;
-      // }
 
       const updatedUser = await userService.updateUser(id, data);
       if (!updatedUser) {
