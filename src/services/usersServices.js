@@ -23,6 +23,14 @@ const userService = {
     return await Users.findById(objectId).select("-password");
   },
 
+  async getUserByIdPatch(id) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new Error("Invalid ID format");
+    }
+    const objectId = new mongoose.Types.ObjectId(id);
+    return await Users.findById(objectId);
+  },
+
   async updateUser(id, data) {
     const newId = new mongoose.Types.ObjectId(id);
     const response = await Users.findByIdAndUpdate(newId, data);

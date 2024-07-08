@@ -15,6 +15,7 @@ const usersController = {
   getUserById: async (req, res, next) => {
     try {
       const { id } = req.params;
+      console.log(req);
       const user = await userService.getUserById(id);
       if (!user) {
         const error = new Error("User not found");
@@ -31,7 +32,6 @@ const usersController = {
     try {
       const { email, password } = req.body;
       const user = await userService.findByEmail(email);
-
       if (!user || !(await utils.bcrypt.compare(password, user.password))) {
         const error = new Error("Invalid email or password");
         error.statusCode = 401;
@@ -79,15 +79,13 @@ const usersController = {
         isAdmin: user.isAdmin,
         email: user.email,
       });
-      return res
-        .status(201)
-        .json({
-          message: "User Created",
-          email: user.email,
-          id: user._id,
-          firstName: user.firstName,
-          token,
-        });
+      return res.status(201).json({
+        message: "User Created",
+        email: user.email,
+        id: user._id,
+        firstName: user.firstName,
+        token,
+      });
     } catch (error) {
       next(error);
     }
@@ -97,12 +95,37 @@ const usersController = {
     try {
       const { id } = req.params;
       const data = req.body;
-      const user = await userService.updateUser(id, data);
+      const user = await userService.getUserByIdPatch(id);
       if (!user) {
         const error = new Error("User not found");
         error.statusCode = 404;
         return next(error);
       }
+      console.log(data.password);
+      console.log(user);
+      const isPasswordCorrect = await utils.bcrypt.compare(
+        data.password,
+        "$2b$10$tr4uSmRqCDPj8VnFtTZ3AuMXJe2f3mUON5sxcnf6AZqZGudv2SbWS"
+      );
+      console.log(isPasswordCorrect);
+      if (!isPasswordCorrect) {
+        const error = new Error("Password is incorrect");
+        error.statusCode = 401;
+        return next(error);
+      }
+
+      // if (data.password) {
+      //   const hashedPassword = await bcrypt.hash(data.password, 10);
+      //   data.password = hashedPassword;
+      // }
+
+      const updatedUser = await userService.updateUser(id, data);
+      if (!updatedUser) {
+        const error = new Error("User update failed");
+        error.statusCode = 400;
+        return next(error);
+      }
+
       return res.status(200).json({ message: "Update successful" });
     } catch (error) {
       next(error);
