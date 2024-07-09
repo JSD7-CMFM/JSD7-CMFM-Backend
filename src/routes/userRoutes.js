@@ -19,7 +19,3 @@ userRoute.patch("/:id", authenticate, C.updateUsers);
 userRoute.delete("/:id", C.deleteUsers);
 
 export default userRoute;
-
-//check token 1
-// query email in data base if user.email == database.email
-//
