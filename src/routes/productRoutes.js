@@ -11,7 +11,7 @@ productRoute.get("/", C.getProducts);
 
 productRoute.get("/:id", C.getProductId);
 
-productRoute.post("/", authenticate, authenticateAdmin, C.postProduct);
+productRoute.post("/", authenticate, C.postProduct);
 
 productRoute.patch("/:id", C.updateProducts)
 

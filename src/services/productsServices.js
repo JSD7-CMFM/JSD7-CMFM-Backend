@@ -2,7 +2,7 @@ import { Products } from "../models/productsModel.js";
 import { mongoose } from "mongoose";
 
 const productServices = {
-  async getAllProducts(req, res) {
+  async searchProducts(req, res) {
     let { limit, page, search } = req.query;
     limit = parseInt(limit);
     page = parseInt(page);
@@ -16,6 +16,19 @@ const productServices = {
     const count = await Products.countDocuments();
     const totalPage = Math.ceil(count / limit);
     return { response, totalPage };
+  },
+
+  async getAllProducts() {
+    const response = await Products.find();
+    return response;
+  },
+  getProducts: async (req, res, next) => {
+    try {
+      const data = await productServices.getAllProducts();
+      return res.status(200).json(data);
+    } catch (error) {
+      next(error);
+    }
   },
 
   async getProductById(id) {
