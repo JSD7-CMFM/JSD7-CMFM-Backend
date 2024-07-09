@@ -54,15 +54,14 @@ const orderController = {
     try {
       const {id } = req.query;
       const updateData = req.body;
-      const data = await orderService.createOrderById(id, updateData);
-      if (!data) {
-        const error = new Error("Order not found");
-        error.statusCode = 404;
-        return next(error);
-      }
-      return res.status(200).json({ message: "Update successful" });
+      const data = await orderService.createOrderById(req, res);
+      // if (!data) {
+      //   const error = new Error("Order not found 59");
+      //   error.statusCode = 404;
+      //   return next(error);
+      // }
+      // return res.status(200).json({ message: "Update successful" });
     } catch (error) {
-      next(error);
     }
   }
 };

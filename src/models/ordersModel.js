@@ -4,13 +4,19 @@ const ordersSchema = new mongoose.Schema(
   {
     user_id: { type: mongoose.Schema.Types.ObjectId, require: true },
     cart_products: [
-      {
-        product_id: {
-          type: mongoose.Schema.Types.ObjectId,
-          required: true,
-        },
-        amount: { type: Number, require: true },
+    {
+      product_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Products",
+        required: true,
       },
+      amount: { type: Number, required: true },
+      name: { type: String, required: true },
+      category: { type: String, required: true },
+      description: { type: String },
+      price: { type: Number, required: true },
+      product_img: { type: String },
+      }
     ],
     total_price: { type: Number, require: true },
     status: { type: String, require: true, unique: true },
