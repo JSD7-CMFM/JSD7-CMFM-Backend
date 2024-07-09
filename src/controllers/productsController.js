@@ -3,7 +3,7 @@ import productServices from "../services/productsServices.js";
 const productsController = {
   getProducts: async (req, res, next) => {
     try {
-      const data = await productServices.getAllProducts();
+      const data = await productServices.getAllProducts(req, res);
       return res.status(200).json(data);
     } catch (error) {
       next(error);
