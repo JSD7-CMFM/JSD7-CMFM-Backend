@@ -1,5 +1,7 @@
 import express from "express";
 import productsController from "../controllers/productsController.js";
+import authenticate from "../middlewares/authenticate.js";
+import authenticateAdmin from "../middlewares/authenticateAdmin.js";
 
 const C = productsController
 
@@ -9,7 +11,7 @@ productRoute.get("/", C.getProducts);
 
 productRoute.get("/:id", C.getProductId);
 
-productRoute.post("/", C.postProduct);
+productRoute.post("/", authenticate, authenticateAdmin, C.postProduct);
 
 productRoute.patch("/:id", C.updateProducts)
 
