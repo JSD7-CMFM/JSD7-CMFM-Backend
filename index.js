@@ -6,8 +6,9 @@ import cors from "cors";
 
 const app = express();
 const port = process.env.PORT;
+const mongourl = process.env.MONGO_URI;
 app.use(cors());
-await mongoose.connect(process.env.MONGO_URI);
+await mongoose.connect(mongourl);
 
 restApiServer(app);
 
