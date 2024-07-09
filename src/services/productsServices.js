@@ -2,20 +2,27 @@ import { Products } from "../models/productsModel.js";
 import { mongoose } from "mongoose";
 
 const productServices = {
-  async searchProducts(req, res) {
-    let { limit, page, search } = req.query;
-    limit = parseInt(limit);
-    page = parseInt(page);
-    console.log(search);
-    const skip = (page - 1) * limit;
-    const response = await Products.find({
-      name: { $regex: new RegExp(search, "i") },
-    })
-      .skip(skip)
-      .limit(limit || 12);
-    const count = await Products.countDocuments();
-    const totalPage = Math.ceil(count / limit);
-    return { response, totalPage };
+  async searchProducts(req, res, next) {
+    try {
+      let { limit, page, search } = req.query;
+      limit = parseInt(limit) || 12;
+      page = parseInt(page) || 1;
+
+      const skip = (page - 1) * limit;
+
+      const response = await Products.find({ name: { $regex: search, $options: 'i' } })
+        .skip(skip)
+        .limit(limit);
+
+      const count = await Products.countDocuments({ name: { $regex: search, $options: 'i' } });
+      const totalPage = Math.ceil(count / limit);
+
+      if (!res.headersSent) {
+        return res.json({ response, totalPage });
+      }
+    } catch (error) {
+      next(error);
+    }
   },
 
   async getAllProducts() {
