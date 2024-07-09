@@ -9,7 +9,7 @@ const productRoute = express.Router();
 
 productRoute.get("/", C.getProducts);
 
-productRoute.get("/search", C.searchProducts);
+// productRoute.get("/search", C.searchProducts);
 
 productRoute.get("/:id", C.getProductId);
 

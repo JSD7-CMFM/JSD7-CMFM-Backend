@@ -2,14 +2,14 @@ import productServices from "../services/productsServices.js";
 
 const productsController = {
 
-  searchProducts: async (req, res, next) => {
-    try {
-      const data = await productServices.searchProducts(req, res);
-      return res.status(200).json(data);
-    } catch (error) {
-      next(error);
-    }
-  },
+  // searchProducts: async (req, res, next) => {
+  //   try {
+  //     const data = await productServices.searchProducts(req, res);
+  //     return res.status(200).json(data);
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // },
   getProducts: async (req, res, next) => {
     try {
       const data = await productServices.getAllProducts(req, res);
