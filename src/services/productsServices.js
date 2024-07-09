@@ -6,16 +6,27 @@ const productServices = {
     let { limit, page, search } = req.query;
     limit = parseInt(limit);
     page = parseInt(page);
-    console.log(search);
+    console.log(req.query);
     const skip = (page - 1) * limit;
-    const response = await Products.find({
-      name: { $regex: new RegExp(search, "i") },
-    })
-      .skip(skip)
-      .limit(limit || 12);
+    const response = await Products.find({ name: { $regex: search, $options: 'i' } })
+    .skip(skip)
+    .limit(limit || 12);
     const count = await Products.countDocuments();
     const totalPage = Math.ceil(count / limit);
-    return { response, totalPage };
+    return res.json({ response, totalPage });
+  },
+
+  // async getAllProducts() {
+  //   const response = await Products.find();
+  //   return response;
+  // },
+  getProducts: async (req, res, next) => {
+    try {
+      const data = await productServices.getAllProducts();
+      return res.status(200).json(data);
+    } catch (error) {
+      next(error);
+    }
   },
 
   async getProductById(id) {

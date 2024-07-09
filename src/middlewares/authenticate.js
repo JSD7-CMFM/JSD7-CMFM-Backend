@@ -3,6 +3,7 @@ import { Users } from "../models/usersModel.js";
 import { mongoose } from "mongoose";
 
 const authenticate = async (req, res, next) => {
+  console.log(req.headers)
   try {
     if (!req?.headers?.authorization) {
       throw new Error(
