@@ -95,22 +95,29 @@ const usersController = {
     try {
       const { id } = req.params;
       const data = req.body;
+      const tokenUser = req.user;
       const user = await userService.getUserByIdPatch(id);
       if (!user) {
         const error = new Error("User not found");
         error.statusCode = 404;
         return next(error);
       }
-      const isPasswordCorrect = await utils.bcrypt.compare(
-        data.password,
-        user.password
-      );
-      if (!isPasswordCorrect) {
-        const error = new Error("Password is incorrect");
-        error.statusCode = 401;
-        return next(error);
-      }
 
+      if (!tokenUser.isAdmin) {
+        if (!data.password) {
+          res.json({ message: "Unauthorized" });
+          return;
+        }
+        const isPasswordCorrect = await utils.bcrypt.compare(
+          data.password,
+          user.password
+        );
+        if (!isPasswordCorrect) {
+          const error = new Error("Password is incorrect");
+          error.statusCode = 401;
+          return next(error);
+        }
+      }
       const updatedUser = await userService.updateUser(id, data);
       if (!updatedUser) {
         const error = new Error("User update failed");
