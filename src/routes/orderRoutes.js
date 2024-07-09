@@ -8,5 +8,7 @@ const orderRoute = express.Router();
 orderRoute.get("/", C.getOrders);
 orderRoute.get("/:id", C.getOrder);
 orderRoute.patch("/:id", C.updateOrder);
+orderRoute.post("/:id", C.createOrder);
+
 
 export default orderRoute;
