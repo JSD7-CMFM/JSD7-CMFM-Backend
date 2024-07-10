@@ -8,6 +8,7 @@ const productServices = {
     page = parseInt(page || 1);
     const skip = (page - 1) * limit;
     const response = await Products.find({ name: { $regex: search || "", $options: 'i' } })
+    .sort({ productId: 1 })
     .skip(skip)
     .limit(limit || 12);
     const count = await Products.countDocuments();
