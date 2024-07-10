@@ -20,18 +20,49 @@ const orderService = {
     }
   },
 
+  // createOrder: async (data) => {
+  //   console.log("data service", data);
+  //   try {
+  //     // const latestOrder = await Orders.findOne()
+  //     //   .sort({ orderNumber: -1 })
+  //     //   .exec();
+  //     // const newOrderNumber = latestOrder ? latestOrder.orderNumber + 1 : 1;
+  //     // data.orderNumber = newOrderNumber;
+
+  //     const response = await Orders.create(data);
+  //     return response;
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // },
   createOrder: async (data) => {
     try {
-      // const latestOrder = await Orders.findOne()
-      //   .sort({ orderNumber: -1 })
-      //   .exec();
-      // const newOrderNumber = latestOrder ? latestOrder.orderNumber + 1 : 1;
-      // data.orderNumber = newOrderNumber;
+      // Find the latest order by orderNumber
+      const latestOrder = await Orders.findOne()
+        .sort({ orderNumber: -1 })
+        .exec();
 
+      // Log the latestOrder details for debugging
+      console.log("Latest Order:", latestOrder);
+
+      // Determine the new order number
+      const newOrderNumber =
+        latestOrder && latestOrder.orderNumber
+          ? latestOrder.orderNumber + 1
+          : 1;
+
+      // Log the new order number for debugging
+      console.log("New Order Number:", newOrderNumber);
+
+      // Assign the new order number to the order data
+      data.orderNumber = newOrderNumber;
+
+      // Create the new order
       const response = await Orders.create(data);
       return response;
     } catch (error) {
-      console.log(error);
+      console.error("Error in createOrder:", error);
+      throw error; // Ensure the error is propagated correctly
     }
   },
 

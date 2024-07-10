@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const ordersSchema = new mongoose.Schema(
   {
-    user_id: { type: String, require: true },
+    user_id: { type: String, required: true },
     cart_products: [
       {
         product_id: {
@@ -20,7 +20,7 @@ const ordersSchema = new mongoose.Schema(
     total_price: { type: Number },
     status: { type: String, default: "pending" },
     address: { type: String },
-    // orderNumber: { type: Number, unique: true },
+    orderNumber: { type: Number, unique: true },
   },
   { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
 );

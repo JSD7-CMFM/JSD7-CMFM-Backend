@@ -17,12 +17,20 @@ const usersController = {
     try {
       const { id } = req.params;
       const user = await userService.getUserById(id);
+      const userOrderHistory = await Orders.find({
+        user_id: id,
+        status: "Success",
+      });
       if (!user) {
         const error = new Error("User not found");
         error.statusCode = 404;
         return next(error);
       }
-      return res.status(200).json({ message: "Get User By ID", data: user });
+      return res.status(200).json({
+        message: "Get User By ID",
+        data: user,
+        userOrderHistory: userOrderHistory,
+      });
     } catch (error) {
       next(error);
     }
