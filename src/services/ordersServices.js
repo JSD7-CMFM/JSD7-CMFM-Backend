@@ -52,6 +52,10 @@ const orderService = {
           product_id: updateData.product_id,
           amount: updateData.amount,
           name: updateData.name,
+          category: updateData.category,
+          description: updateData.description,
+          price: updateData.price,
+          product_img: updateData.product_img
         };
         order.cart_products.push(newItem);
       }
