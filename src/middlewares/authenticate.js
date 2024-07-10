@@ -3,7 +3,6 @@ import { Users } from "../models/usersModel.js";
 import { mongoose } from "mongoose";
 
 const authenticate = async (req, res, next) => {
-  console.log(req.headers);
   try {
     if (!req?.headers?.authorization) {
       throw new Error(
@@ -37,7 +36,6 @@ const authenticate = async (req, res, next) => {
     // if (!user.isAdmin) {
     //   next(new Error("No permission, you are not an admin", "NotAdmin", 403));
     // }
-
     req.user = user;
     next();
   } catch (err) {

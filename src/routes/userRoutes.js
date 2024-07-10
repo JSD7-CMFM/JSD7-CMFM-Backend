@@ -8,7 +8,7 @@ const userRoute = express.Router();
 
 userRoute.get("/", C.getUsers);
 
-userRoute.get("/:id", authenticate, C.getUserById);
+userRoute.get("/:id", C.getUserById);
 
 userRoute.post("/register", C.createUser);
 

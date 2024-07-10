@@ -5,15 +5,14 @@ const productServices = {
   async getAllProducts(req, res) {
     let { limit, page, search } = req.query;
     limit = parseInt(limit);
-    page = parseInt(page);
-    console.log(req.query);
+    page = parseInt(page || 1);
     const skip = (page - 1) * limit;
-    const response = await Products.find({ name: { $regex: search, $options: 'i' } })
+    const response = await Products.find({ name: { $regex: search || "", $options: 'i' } })
     .skip(skip)
     .limit(limit || 12);
     const count = await Products.countDocuments();
     const totalPage = Math.ceil(count / limit);
-    return res.json({ response, totalPage });
+    return { response, totalPage };
   },
 
   // async getAllProducts() {
