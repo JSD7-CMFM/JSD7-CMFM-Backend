@@ -20,6 +20,9 @@ const authenticate = async (req, res, next) => {
       ? authorization.split(" ")[1]
       : next(new Error("Not found Bearer token", "InvalidToken", 400));
 
+    if (!token) {
+      throw new Error("Not found token", "InvalidToken", 400);
+    }
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY || "key");
 
     if (!mongoose.Types.ObjectId.isValid(decoded.id)) {
