@@ -1,3 +1,4 @@
+import { Orders } from "../models/ordersModel.js";
 import { Users } from "../models/usersModel.js";
 import userService from "../services/usersServices.js";
 import utils from "../utils/index.js";
@@ -36,6 +37,13 @@ const usersController = {
         error.statusCode = 401;
         return next(error);
       }
+
+      const checkId = user._id.toString();
+      const checkUserCart = await Orders.findOne({
+        user_id: checkId,
+        status: "pending",
+      }).select("_id");
+
       const token = utils.jwt.sign({
         id: user._id,
         email: user.email,
@@ -47,6 +55,7 @@ const usersController = {
         email: user.email,
         id: user._id,
         firstName: user.firstName,
+        cart: checkUserCart ? checkUserCart._id : "No_cart",
         token: token,
       });
     } catch (error) {
@@ -84,6 +93,7 @@ const usersController = {
         email: user.email,
         id: user._id,
         firstName: user.firstName,
+        cart: "No_cart",
         token,
       });
     } catch (error) {
@@ -105,7 +115,9 @@ const usersController = {
 
       if (!tokenUser.isAdmin) {
         if (!data.password) {
-          res.json({ message: "Unauthorized" });
+          res
+            .status(401)
+            .json({ message: "Unauthorized: Password is required" });
           return;
         }
         const isPasswordCorrect = await utils.bcrypt.compare(
@@ -114,10 +126,12 @@ const usersController = {
         );
         if (!isPasswordCorrect) {
           const error = new Error("Password is incorrect");
+          error.message = "Password is incorrect";
           error.statusCode = 401;
           return next(error);
         }
       }
+      delete data.password;
       const updatedUser = await userService.updateUser(id, data);
       if (!updatedUser) {
         const error = new Error("User update failed");
