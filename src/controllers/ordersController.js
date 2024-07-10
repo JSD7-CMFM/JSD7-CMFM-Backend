@@ -27,11 +27,11 @@ const orderController = {
 
   createOrder: async (req, res, next) => {
     const data = req.body;
-
+    console.log("Request Body:", data);
     try {
       const order = await orderService.createOrder(data);
       if (!order) {
-        const error = new Error("Order/Cart fail to create");
+        const error = new Error("Order/Cart failed to create");
         error.statusCode = 400;
         return next(error);
       }
