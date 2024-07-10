@@ -7,11 +7,18 @@ const productServices = {
     limit = parseInt(limit);
     page = parseInt(page || 1);
     const skip = (page - 1) * limit;
-    const response = await Products.find({ name: { $regex: search || "", $options: 'i' } })
-    .sort({ productId: 1 })
-    .skip(skip)
-    .limit(limit || 12);
-    const count = await Products.countDocuments();
+    const response = await Products.find({
+      name: { $regex: search || "", $options: "i" },
+    })
+      .skip(skip)
+      .limit(limit || 12);
+    let count;
+    if (search) {
+      count = response.length;
+    } else {
+      count = await Products.countDocuments();
+    }
+
     const totalPage = Math.ceil(count / limit);
     return { response, totalPage };
   },
