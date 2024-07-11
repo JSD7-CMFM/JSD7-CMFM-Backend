@@ -13,7 +13,7 @@ const extractProductInfo = (message) => {
   const nameMatch = message.match(nameRegex);
 
   const type = typeMatch ? typeMatch[1].trim() : null;
-  const name = nameMatch ? nameMatch[1].trim() : null;
+  const name = nameMatch ? nameMatch[1].trim() : message.trim();
 
   return { name, type };
 };
@@ -25,16 +25,17 @@ chatRoute.post("/", async (req, res) => {
     // แยกชื่อสินค้าและประเภทจากข้อความคำขอ
     const { name, type } = extractProductInfo(userMessage);
 
-    if (!name || !type) {
-      res.json({ reply: "กรุณาระบุชื่อสินค้าและประเภทอย่างชัดเจน" });
+    if (!name) {
+      res.json({ reply: "กรุณาระบุชื่อสินค้าอย่างชัดเจน" });
       return;
     }
 
     // ดึงข้อมูลสินค้าจาก MongoDB โดยรวมสินค้าที่มีชื่อและประเภทตรงกัน
-    const products = await Products.find({
-      name: { $regex: name, $options: "i" },
-      type: { $regex: type, $options: "i" },
-    });
+    const query = type
+      ? { name: { $regex: name, $options: "i" }, type: { $regex: type, $options: "i" } }
+      : { name: { $regex: name, $options: "i" } };
+
+    const products = await Products.find(query);
 
     if (products.length === 0) {
       res.json({ reply: "ไม่มีสินค้าที่ตรงกับคำค้นหาของคุณ" });
@@ -43,8 +44,7 @@ chatRoute.post("/", async (req, res) => {
 
     let productInfo = "นี่คือข้อมูลสินค้าที่พบ:\n";
     products.forEach((product) => {
-      const storage = product.productinfo?.storage ? product.productinfo.storage.join(", ") : "ไม่มีข้อมูล";
-      productInfo += `ชื่อ: ${product.name}\n ราคา: ${product.price} บาท\n ประเภท: ${product.type}\n ข้อมูลเพิ่มเติม:\n - ขนาดหน้าจอ: ${product.productinfo?.display || "ไม่มีข้อมูล"}\n - ระบบปฏิบัติการ: ${product.productinfo?.operatingSystem || "ไม่มีข้อมูล"}\n - ซีพียู: ${product.productinfo?.cpu || "ไม่มีข้อมูล"}\n - กล้องหลัง: ${product.productinfo?.rearCamera || "ไม่มีข้อมูล"}\n - กล้องหน้า: ${product.productinfo?.frontCamera || "ไม่มีข้อมูล"}\n - แบตเตอรี่: ${product.productinfo?.battery || "ไม่มีข้อมูล"}\n - ความจุ: ${storage}\n\n`;
+      productInfo += `ชื่อ: ${product.name}\n ราคา: ${product.price} บาท\n ประเภท: ${product.type}\n ข้อมูลเพิ่มเติม: ${product.description}\n\n`;
     });
 
     // ส่งข้อความผู้ใช้และข้อมูลสินค้าไปยัง OpenAI API
