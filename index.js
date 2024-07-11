@@ -34,7 +34,10 @@ const mongourl = process.env.MONGO_URI;
 
 app.use(express.json());
 
-mongoose.connect(mongourl)
+mongoose.connect(mongourl, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log('MongoDB connection error:', err));
 
@@ -43,4 +46,3 @@ restApiServer(app);
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
-

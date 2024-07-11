@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
-import chatRoute from "../../src/routes/chat.js";
+import chatRoute from "../routes/chatRoutes.js";
 import userRoute from "../../src/routes/userRoutes.js";
 import productRoute from "../../src/routes/productRoutes.js";
 import orderRoute from "../../src/routes/orderRoutes.js";
