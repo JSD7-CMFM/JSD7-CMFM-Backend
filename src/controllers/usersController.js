@@ -19,7 +19,7 @@ const usersController = {
       const user = await userService.getUserById(id);
       const userOrderHistory = await Orders.find({
         user_id: id,
-        status: "Success",
+        status: "success",
       });
       if (!user) {
         const error = new Error("User not found");

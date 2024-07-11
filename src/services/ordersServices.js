@@ -70,6 +70,7 @@ const orderService = {
     try {
       const newId = new mongoose.Types.ObjectId(id);
       const order = await Orders.findById(newId);
+      console.log("Updated cart products:", order);
       if (!order) {
         throw new Error("Order not found");
       }
@@ -93,6 +94,15 @@ const orderService = {
         }
         const response = await order.save();
         return response;
+      }
+      if (source === "delete") {
+        order.cart_products = order.cart_products.filter(
+          (product) => product.product_id !== updateData[0].product_id
+        );
+        const response = await order.save();
+        return response;
+      }
+      if (source === "checkout") {
       }
     } catch (error) {
       console.log(error);
