@@ -70,6 +70,7 @@ const orderService = {
     try {
       const newId = new mongoose.Types.ObjectId(id);
       const order = await Orders.findById(newId);
+      console.log(typeof source);
       if (!order) {
         throw new Error("Order not found");
       }
@@ -92,6 +93,17 @@ const orderService = {
           order.cart_products.push(newItem);
         }
         const response = await order.save();
+        return response;
+      }
+      if (source === "delete") {
+        order.cart_products = order.cart_products.filter(
+          (product) => product.product_id !== updateData.product_id
+        );
+        console.log("updateData", updateData.product_id);
+        console.log("product", order.cart_products.product_id);
+
+        const response = await order.save();
+        console.log("response", response);
         return response;
       }
     } catch (error) {
