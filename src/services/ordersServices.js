@@ -20,21 +20,6 @@ const orderService = {
     }
   },
 
-  // createOrder: async (data) => {
-  //   console.log("data service", data);
-  //   try {
-  //     // const latestOrder = await Orders.findOne()
-  //     //   .sort({ orderNumber: -1 })
-  //     //   .exec();
-  //     // const newOrderNumber = latestOrder ? latestOrder.orderNumber + 1 : 1;
-  //     // data.orderNumber = newOrderNumber;
-
-  //     const response = await Orders.create(data);
-  //     return response;
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // },
   createOrder: async (data) => {
     try {
       // Find the latest order by orderNumber
@@ -70,13 +55,14 @@ const orderService = {
     try {
       const newId = new mongoose.Types.ObjectId(id);
       const order = await Orders.findById(newId);
-      console.log(typeof source);
+
       if (!order) {
         throw new Error("Order not found");
       }
+
       if (source === "addProduct") {
         const checkProductIndex = order.cart_products.findIndex(
-          (item) => item.product_id === updateData.product_id
+          (item) => item.product_id.toString() === updateData.product_id.toString()
         );
         if (checkProductIndex !== -1) {
           order.cart_products[checkProductIndex].amount += updateData.amount;
@@ -95,15 +81,13 @@ const orderService = {
         const response = await order.save();
         return response;
       }
+
       if (source === "delete") {
         order.cart_products = order.cart_products.filter(
-          (product) => product.product_id !== updateData.product_id
+          (product) => product.product_id.toString() !== updateData.product_id.toString()
         );
-        console.log("updateData", updateData.product_id);
-        console.log("product", order.cart_products.product_id);
 
         const response = await order.save();
-        console.log("response", response);
         return response;
       }
     } catch (error) {
@@ -120,7 +104,7 @@ const orderService = {
       let response;
       if (existingOrder) {
         // If order exists, merge existing data with new updateData
-        const updatedData = { ...existingOrder, ...updateData };
+        const updatedData = { ...existingOrder.toObject(), ...updateData };
         // Update the order
         response = await Orders.findByIdAndUpdate(newId, updatedData, {
           new: true,
@@ -135,24 +119,6 @@ const orderService = {
       throw error; // Rethrow the error to handle it further up the call stack
     }
   },
-
-  //   createOrderById: async (req, res) => {
-  //   try {
-  //     const { id } = req.params
-  //     const { } = req.body
-  //     console.log(id)
-  //     const order = await Orders.findOne({ user_id: id }).exec()
-  //     if (!order) {
-  //       let newOrder = new Orders({
-  //         user_id: id
-  //       })
-
-  //       let response = await newOrder.save()
-  //       res.send(response)
-  //     }
-  //   } catch (error) {
-
-  //   }
-  // }
 };
+
 export default orderService;
