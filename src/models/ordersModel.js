@@ -14,7 +14,7 @@ const ordersSchema = new mongoose.Schema(
         description: { type: String },
         category: { type: String },
         product_img: { type: String },
-        price: { type: Number }
+        price: { type: Number },
       },
     ],
     total_price: { type: Number },
