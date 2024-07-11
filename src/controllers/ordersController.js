@@ -47,6 +47,7 @@ const orderController = {
     try {
       const { id } = req.params;
       const updateData = req.body;
+      console.log("Request Body:", updateData);
       const source = req.headers.source;
       const data = await orderService.updateOrderById(id, updateData, source);
       if (!data) {
