@@ -44,8 +44,7 @@ chatRoute.post("/", async (req, res) => {
 
     let productInfo = "นี่คือข้อมูลสินค้าที่พบ:\n";
     products.forEach((product) => {
-      const storage = product.productinfo?.storage ? product.productinfo.storage.join(", ") : "ไม่มีข้อมูล";
-      productInfo += `ชื่อ: ${product.name}\n ราคา: ${product.price} บาท\n ประเภท: ${product.type}\n ข้อมูลเพิ่มเติม:\n - ขนาดหน้าจอ: ${product.productinfo?.display || "ไม่มีข้อมูล"}\n - ระบบปฏิบัติการ: ${product.productinfo?.operatingSystem || "ไม่มีข้อมูล"}\n - ซีพียู: ${product.productinfo?.cpu || "ไม่มีข้อมูล"}\n - กล้องหลัง: ${product.productinfo?.rearCamera || "ไม่มีข้อมูล"}\n - กล้องหน้า: ${product.productinfo?.frontCamera || "ไม่มีข้อมูล"}\n - แบตเตอรี่: ${product.productinfo?.battery || "ไม่มีข้อมูล"}\n - ความจุ: ${storage}\n\n`;
+      productInfo += `ชื่อ: ${product.name}\n ราคา: ${product.price} บาท\n ประเภท: ${product.type}\n รายละเอียด: ${product.description}\n ลิงก์รูปภาพ: ${product.product_img}\n\n`;
     });
 
     // Send the user's message and product information to the OpenAI API
