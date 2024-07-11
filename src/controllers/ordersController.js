@@ -47,7 +47,8 @@ const orderController = {
     try {
       const { id } = req.params;
       const updateData = req.body;
-      const data = await orderService.updateOrderById(id, updateData);
+      const source = req.headers.source;
+      const data = await orderService.updateOrderById(id, updateData, source);
       if (!data) {
         const error = new Error("Order not found");
         error.statusCode = 404;

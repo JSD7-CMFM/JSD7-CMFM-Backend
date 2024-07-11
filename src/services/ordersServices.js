@@ -66,28 +66,34 @@ const orderService = {
     }
   },
 
-  updateOrderById: async (id, updateData) => {
+  updateOrderById: async (id, updateData, source) => {
     try {
       const newId = new mongoose.Types.ObjectId(id);
       const order = await Orders.findById(newId);
       if (!order) {
         throw new Error("Order not found");
       }
-      const checkProductIndex = order.cart_products.findIndex(
-        (item) => item.product_id === updateData.product_id
-      );
-      if (checkProductIndex !== -1) {
-        order.cart_products[checkProductIndex].amount = updateData.amount;
-      } else {
-        const newItem = {
-          product_id: updateData.product_id,
-          amount: updateData.amount,
-          name: updateData.name,
-        };
-        order.cart_products.push(newItem);
+      if (source === "addProduct") {
+        const checkProductIndex = order.cart_products.findIndex(
+          (item) => item.product_id === updateData.product_id
+        );
+        if (checkProductIndex !== -1) {
+          order.cart_products[checkProductIndex].amount += updateData.amount;
+        } else {
+          const newItem = {
+            product_id: updateData.product_id,
+            amount: updateData.amount,
+            name: updateData.name,
+            category: updateData.category,
+            description: updateData.description,
+            price: updateData.price,
+            product_img: updateData.product_img,
+          };
+          order.cart_products.push(newItem);
+        }
+        const response = await order.save();
+        return response;
       }
-      const response = await order.save();
-      return response;
     } catch (error) {
       console.log(error);
     }

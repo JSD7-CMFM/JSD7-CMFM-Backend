@@ -62,6 +62,7 @@ const usersController = {
         message: "Login Successful",
         email: user.email,
         id: user._id,
+        isAdmin: user.isAdmin,
         firstName: user.firstName,
         cart: checkUserCart ? checkUserCart._id : "No_cart",
         token: token,
