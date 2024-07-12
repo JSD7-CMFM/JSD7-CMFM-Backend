@@ -97,6 +97,7 @@ const usersController = {
         isAdmin: user.isAdmin,
         email: user.email,
       });
+      console.log("admin", user.isAdmin);
       return res.status(201).json({
         message: "User Created",
         email: user.email,
