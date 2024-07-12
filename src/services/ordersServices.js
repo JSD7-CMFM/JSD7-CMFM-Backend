@@ -89,7 +89,14 @@ const orderService = {
         const response = await order.save();
         return response;
       }
+
       if (source === "checkout") {
+      }
+      
+      if (source === "updateStatus") {
+        order.status = updateData.status;
+        const response = await order.save();
+        return response;
       }
     } catch (error) {
       console.log(error);

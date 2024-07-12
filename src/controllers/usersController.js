@@ -123,6 +123,7 @@ const usersController = {
       }
 
       if (!tokenUser.isAdmin) {
+        console.log(tokenUser.isAdmin)
         if (!data.password) {
           res
             .status(401)
