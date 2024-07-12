@@ -47,9 +47,15 @@ const productsController = {
   updateProducts: async (req, res, next) => {
     try {
       const { id } = req.params;
+      console.log(req.body); // ตรวจสอบข้อมูลที่ได้รับ
       const data = req.body;
-      await productServices.updateProduct(id, data);
-      return res.status(200).json({ message: "Update successful" });
+      const updatedProduct = await productServices.updateProduct(id, data);
+      if (!updatedProduct) {
+        const error = new Error("Product not found");
+        error.statusCode = 404;
+        return next(error);
+      }
+      return res.status(200).json({ message: "Update successful", updatedProduct });
     } catch (error) {
       next(error);
     }
