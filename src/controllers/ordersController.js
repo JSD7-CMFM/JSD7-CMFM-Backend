@@ -27,7 +27,6 @@ const orderController = {
 
   createOrder: async (req, res, next) => {
     const data = req.body;
-    console.log("Request Body:", data);
     try {
       const order = await orderService.createOrder(data);
       if (!order) {
@@ -48,9 +47,6 @@ const orderController = {
       const { id } = req.params;
       const updateData = req.body;
       const source = req.headers.source;
-      console.log("ID:", id);
-      console.log("Update Data:", updateData);
-      console.log("Source:", source);
       const data = await orderService.updateOrderById(id, updateData, source);
       if (!data) {
         const error = new Error("Controller: Order not found");

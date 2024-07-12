@@ -47,7 +47,6 @@ const productsController = {
   updateProducts: async (req, res, next) => {
     try {
       const { id } = req.params;
-      console.log(req.body); // ตรวจสอบข้อมูลที่ได้รับ
       const data = req.body;
       const updatedProduct = await productServices.updateProduct(id, data);
       if (!updatedProduct) {
