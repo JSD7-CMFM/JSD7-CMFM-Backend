@@ -75,6 +75,7 @@ const orderService = {
             description: updateData.description,
             price: updateData.price,
             product_img: updateData.product_img,
+            type: updateData.type
           };
           order.cart_products.push(newItem);
         }
