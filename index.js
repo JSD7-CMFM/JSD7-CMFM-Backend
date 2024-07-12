@@ -1,16 +1,47 @@
+// import "dotenv/config";
+// import express from "express";
+// import restApiServer from "./src/server/rest.js";
+// import mongoose from "mongoose";
+
+
+// const app = express();
+// const port = process.env.PORT;
+// const mongourl = process.env.MONGO_URI;
+
+// app.use(express.json());
+
+// mongoose.connect(mongourl, {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+// })
+// .then(() => console.log('MongoDB connected'))
+// .catch(err => console.log('MongoDB connection error:', err));
+
+// restApiServer(app);
+
+// app.listen(port, () => {
+//   console.log(`Server running on port ${port}`);
+// });
+
+import "dotenv/config";
 import express from "express";
-import router from "./src/routes/index.js";
 import mongoose from "mongoose";
+import restApiServer from "./src/server/rest.js";
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
+const mongourl = process.env.MONGO_URI;
 
-await mongoose.connect(
-  "mongodb+srv://Admin_S:cmfm1234@cmfm.fyrm4ye.mongodb.net/CMFM"
-);
+app.use(express.json());
 
+mongoose.connect(mongourl, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.log('MongoDB connection error:', err));
 
-app.use("/api-services", router);
+restApiServer(app);
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
