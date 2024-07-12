@@ -22,7 +22,7 @@ const notFound = (req, res, next) => {
   const error = new Error(`Not Found - ${req.originalUrl} on the Server`);
   error.status = "Not Found";
   error.statusCode = 404;
-  next(error);
+  next(error);  
 };
 
 const errorAll = (err, req, res, next) => {
