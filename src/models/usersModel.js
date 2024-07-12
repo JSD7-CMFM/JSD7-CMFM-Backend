@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-
 const usersSchema = new mongoose.Schema(
   {
     email: { type: String, require: true, unique: true },
@@ -20,5 +19,4 @@ const usersSchema = new mongoose.Schema(
     timestamps: { createdAt: "created_at", updatedAt: "updated_at" },
   }
 );
-
 export const Users = mongoose.model("Users", usersSchema, "users");
