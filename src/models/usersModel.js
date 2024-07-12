@@ -10,10 +10,10 @@ const usersSchema = new mongoose.Schema(
     phoneNumber: { type: String, require: true },
     isAdmin: { type: Boolean, default: false },
     address: {
-      address: { type: String },
-      province: { type: String },
-      country: { type: String },
-      zipcode: { type: String },
+      address: { type: String, default: "" },
+      province: { type: String, default: "" },
+      country: { type: String, default: "" },
+      zipcode: { type: String, default: "" },
     },
   },
   {

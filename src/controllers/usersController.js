@@ -42,6 +42,7 @@ const usersController = {
       const user = await userService.findByEmail(email);
       if (!user || !(await utils.bcrypt.compare(password, user.password))) {
         const error = new Error("Invalid email or password");
+        error.message = "Invalid email or password";
         error.statusCode = 401;
         return next(error);
       }
@@ -81,6 +82,7 @@ const usersController = {
         const emailDupe = await Users.findOne({ email: req.body.email });
         if (emailDupe) {
           const error = new Error("Email already exists");
+          error.message = "Email already exists";
           error.statusCode = 409;
           return next(error);
         }
