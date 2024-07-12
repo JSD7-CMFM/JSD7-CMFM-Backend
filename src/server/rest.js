@@ -6,6 +6,7 @@ import chatRoute from "../routes/chatRoutes.js";
 import userRoute from "../../src/routes/userRoutes.js";
 import productRoute from "../../src/routes/productRoutes.js";
 import orderRoute from "../../src/routes/orderRoutes.js";
+import mailRoute from "../routes/mailRoutes.js";
 import errorMiddleware from "../middlewares/errorHandling.js";
 
 const restApiServer = (app) => {
@@ -24,6 +25,8 @@ const restApiServer = (app) => {
   app.use("/users", userRoute);
   app.use("/products", productRoute);
   app.use("/orders", orderRoute);
+  app.use("/mails", mailRoute);
+
 
   app.use(errorMiddleware.notFound);
   app.use(errorMiddleware.errorAll);

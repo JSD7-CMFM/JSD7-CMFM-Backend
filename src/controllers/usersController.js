@@ -99,7 +99,6 @@ const usersController = {
         isAdmin: user.isAdmin,
         email: user.email,
       });
-      console.log("admin", user.isAdmin);
       return res.status(201).json({
         message: "User Created",
         email: user.email,
@@ -118,7 +117,6 @@ const usersController = {
     try {
       const { id } = req.params;
       const data = req.body;
-      console.log("data", data);
       const tokenUser = req.user;
       const source = req.headers.source ? req.headers.source : null;
       const user = await userService.getUserByIdPatch(id);
