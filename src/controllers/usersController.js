@@ -97,6 +97,7 @@ const usersController = {
         isAdmin: user.isAdmin,
         email: user.email,
       });
+      console.log("admin", user.isAdmin);
       return res.status(201).json({
         message: "User Created",
         email: user.email,
@@ -104,6 +105,7 @@ const usersController = {
         firstName: user.firstName,
         cart: "No_cart",
         token,
+        isAdmin: user.isAdmin,
       });
     } catch (error) {
       next(error);
@@ -114,16 +116,16 @@ const usersController = {
     try {
       const { id } = req.params;
       const data = req.body;
+      console.log("data", data);
       const tokenUser = req.user;
+      const source = req.headers.source ? req.headers.source : null;
       const user = await userService.getUserByIdPatch(id);
       if (!user) {
         const error = new Error("User not found");
         error.statusCode = 404;
         return next(error);
       }
-
-      if (!tokenUser.isAdmin) {
-        console.log(tokenUser.isAdmin)
+      if (!tokenUser.isAdmin && source !== "update_address") {
         if (!data.password) {
           res
             .status(401)
@@ -142,13 +144,12 @@ const usersController = {
         }
       }
       delete data.password;
-      const updatedUser = await userService.updateUser(id, data);
+      const updatedUser = await userService.updateUser(id, data, source);
       if (!updatedUser) {
         const error = new Error("User update failed");
         error.statusCode = 400;
         return next(error);
       }
-
       return res.status(200).json({ message: "Update successful" });
     } catch (error) {
       next(error);
