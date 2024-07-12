@@ -32,11 +32,11 @@ const userService = {
     return await Users.findById(objectId);
   },
 
-  async updateUser(id, data) {
-    const newId = new mongoose.Types.ObjectId(id);
-    const response = await Users.findByIdAndUpdate(newId, data);
-    return response;
-  },
+    async updateUser(id, data) {
+      const newId = new mongoose.Types.ObjectId(id);
+      const response = await Users.findByIdAndUpdate(newId, data);
+      return response;
+    },
 
   async deleteUser(id, data) {
     const newId = new mongoose.Types.ObjectId(id);

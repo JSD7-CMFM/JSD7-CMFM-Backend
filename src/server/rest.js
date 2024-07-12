@@ -9,7 +9,13 @@ import orderRoute from "../../src/routes/orderRoutes.js";
 import errorMiddleware from "../middlewares/errorHandling.js";
 
 const restApiServer = (app) => {
-  app.use(cors());
+  
+  const corsOptions = {
+    origin: 'http://localhost:5173', // หรือโดเมนที่คุณต้องการอนุญาต
+    credentials: true, // ถ้าคุณต้องการอนุญาต cookies
+  };
+
+  app.use(cors(corsOptions));
   app.use(express.json());
   app.use(bodyParser.json());
   app.use(cookieParser());
