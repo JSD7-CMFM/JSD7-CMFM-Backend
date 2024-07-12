@@ -11,7 +11,7 @@ import errorMiddleware from "../middlewares/errorHandling.js";
 const restApiServer = (app) => {
   
   const corsOptions = {
-    origin: 'http://localhost:5173', // หรือโดเมนที่คุณต้องการอนุญาต
+    origin: ['http://localhost:5173','https://jsd-7-cmfm-frontend.vercel.app'], // หรือโดเมนที่คุณต้องการอนุญาต
     credentials: true, // ถ้าคุณต้องการอนุญาต cookies
   };
 
