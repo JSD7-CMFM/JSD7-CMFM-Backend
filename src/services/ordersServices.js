@@ -56,12 +56,13 @@ const orderService = {
       const newId = new mongoose.Types.ObjectId(id);
       const order = await Orders.findById(newId);
       if (!order) {
-        throw new Error("Order not found");
+        throw new Error("Service: Order not found");
       }
 
       if (source === "addProduct") {
         const checkProductIndex = order.cart_products.findIndex(
-          (item) => item.product_id.toString() === updateData.product_id.toString()
+          (item) =>
+            item.product_id.toString() === updateData.product_id.toString()
         );
         if (checkProductIndex !== -1) {
           order.cart_products[checkProductIndex].amount += updateData.amount;
@@ -120,7 +121,7 @@ const orderService = {
         );
         return response;
       }
-      
+
       if (source === "updateStatus") {
         order.status = updateData.status;
         const response = await order.save();

@@ -48,9 +48,12 @@ const orderController = {
       const { id } = req.params;
       const updateData = req.body;
       const source = req.headers.source;
+      console.log("ID:", id);
+      console.log("Update Data:", updateData);
+      console.log("Source:", source);
       const data = await orderService.updateOrderById(id, updateData, source);
       if (!data) {
-        const error = new Error("Order not found");
+        const error = new Error("Controller: Order not found");
         error.statusCode = 404;
         return next(error);
       }
@@ -59,22 +62,8 @@ const orderController = {
       next(error);
     }
   },
-
-  //   createOrder: async (req, res, next) => {
-  //   try {
-  //     const {id } = req.query;
-  //     const updateData = req.body;
-  //     const data = await orderService.createOrderById(id, updateData);
-  //     if (!data) {
-  //       const error = new Error("Order not found");
-  //       error.statusCode = 404;
-  //       return next(error);
-  //     }
-  //     return res.status(200).json({ message: "Update successful" });
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // }
 };
+ 
+
 
 export default orderController;
