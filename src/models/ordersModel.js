@@ -19,7 +19,12 @@ const ordersSchema = new mongoose.Schema(
     ],
     total_price: { type: Number },
     status: { type: String, default: "pending" },
-    address: { type: String },
+    address: {
+      address: { type: String, default: "" },
+      province: { type: String, default: "" },
+      country: { type: String, default: "" },
+      zipcode: { type: String, default: "" },
+    },
     orderNumber: { type: Number, unique: true },
   },
   { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }

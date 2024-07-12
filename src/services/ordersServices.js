@@ -7,7 +7,7 @@ const orderService = {
       const response = await Orders.find();
       return response;
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   },
 
@@ -16,7 +16,7 @@ const orderService = {
       const response = await Orders.findById(id);
       return response;
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   },
 
@@ -62,7 +62,7 @@ const orderService = {
       return response;
     } catch (error) {
       console.error("Error in createOrder:", error);
-      throw error; // Ensure the error is propagated correctly
+      throw error; // Rethrow the error; // Ensure the error is propagated correctly
     }
   },
 
@@ -70,7 +70,6 @@ const orderService = {
     try {
       const newId = new mongoose.Types.ObjectId(id);
       const order = await Orders.findById(newId);
-      console.log("Updated cart products:", order);
       if (!order) {
         throw new Error("Order not found");
       }
@@ -103,9 +102,38 @@ const orderService = {
         return response;
       }
       if (source === "checkout") {
+        const response = await Orders.findOneAndUpdate(
+          { _id: newId },
+          {
+            $set: {
+              total_price: updateData.total_price,
+              cart_products: updateData.cart_products,
+            },
+          },
+          { new: true }
+        );
+        return response;
+      }
+      if (source === "success") {
+        const response = await Orders.findOneAndUpdate(
+          { _id: newId },
+          {
+            $set: {
+              status: source,
+              address: {
+                address: `${updateData.address}`,
+                province: `${updateData.province}`,
+                zipcode: `${updateData.zipcode}`,
+                country: `${updateData.country}`,
+              },
+            },
+          },
+          { new: true }
+        );
+        return response;
       }
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   },
 

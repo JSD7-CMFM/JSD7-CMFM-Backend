@@ -9,7 +9,12 @@ const usersSchema = new mongoose.Schema(
     status: { type: String, default: "active" },
     phoneNumber: { type: String, require: true },
     isAdmin: { type: Boolean, default: false },
-    address: { type: String, default: "N/A" },
+    address: {
+      address: { type: String },
+      province: { type: String },
+      country: { type: String },
+      zipcode: { type: String },
+    },
   },
   {
     timestamps: { createdAt: "created_at", updatedAt: "updated_at" },
