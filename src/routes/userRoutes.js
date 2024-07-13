@@ -1,13 +1,13 @@
 import express from "express";
 import usersController from "../controllers/usersController.js";
 import authenticate from "../middlewares/authenticate.js";
-import authenticateAdmin from "../middlewares/authenticateAdmin.js";
+// import authenticateAdmin from "../middlewares/authenticateAdmin.js";
 
 const C = usersController;
 
 const userRoute = express.Router();
 
-userRoute.get("/", authenticate, authenticateAdmin, C.getUsers);
+userRoute.get("/", authenticate, C.getUsers);
 
 userRoute.get("/:id", authenticate, C.getUserById);
 
