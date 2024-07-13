@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
     pass: process.env.MAIL_SECRETKEY,
   },
 });
-
+//test
 const mailController = {
   sendOrderConfirmation: async (req, res) => {
     const orderId = req.params.orderId;
