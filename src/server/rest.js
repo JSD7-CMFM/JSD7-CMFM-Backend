@@ -10,10 +10,9 @@ import mailRoute from "../routes/mailRoutes.js";
 import errorMiddleware from "../middlewares/errorHandling.js";
 
 const restApiServer = (app) => {
-  
   const corsOptions = {
-    origin: ['http://localhost:5173','https://jsd-7-cmfm-frontend.vercel.app'], // หรือโดเมนที่คุณต้องการอนุญาต
-    credentials: true, // ถ้าคุณต้องการอนุญาต cookies
+    origin: ['http://localhost:5173', 'https://jsd-7-cmfm-frontend.vercel.app'],
+    credentials: true,
   };
 
   app.use(cors(corsOptions));
@@ -26,7 +25,6 @@ const restApiServer = (app) => {
   app.use("/products", productRoute);
   app.use("/orders", orderRoute);
   app.use("/mails", mailRoute);
-
 
   app.use(errorMiddleware.notFound);
   app.use(errorMiddleware.errorAll);
