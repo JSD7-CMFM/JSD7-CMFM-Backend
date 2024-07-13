@@ -1,6 +1,5 @@
 import express from "express";
 import mailController from "../controllers/mailsController.js";
-import authenticate from "../middlewares/authenticate.js";
 
 const C = mailController;
 
