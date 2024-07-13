@@ -14,7 +14,7 @@ const restApiServer = (app) => {
     origin: ['http://localhost:5173', 'https://jsd-7-cmfm-frontend.vercel.app'],
     credentials: true,
   };
-
+// test
   app.use(cors(corsOptions));
   app.use(express.json());
   app.use(bodyParser.json());
