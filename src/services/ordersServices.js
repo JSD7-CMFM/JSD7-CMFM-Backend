@@ -67,7 +67,6 @@ updateOrderById : async (id, updateData) => {
   try {
     const { user_id } = req.body
     // const { } = req.body
-    
     const userId = await Users.findById(user_id).select({ _id: true})
     console.log(userId)
     if (!userId) {
