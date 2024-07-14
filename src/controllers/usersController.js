@@ -106,7 +106,6 @@ const usersController = {
         firstName: user.firstName,
         cart: "No_cart",
         token,
-        isAdmin: user.isAdmin,
       });
     } catch (error) {
       next(error);
