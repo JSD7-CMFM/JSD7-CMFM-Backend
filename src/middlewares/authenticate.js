@@ -3,7 +3,6 @@ import { Users } from "../models/usersModel.js";
 import { mongoose } from "mongoose";
 
 const authenticate = async (req, res, next) => {
-  console.log(req.headers)
   try {
     if (!req?.headers?.authorization) {
       throw new Error(
@@ -21,6 +20,9 @@ const authenticate = async (req, res, next) => {
       ? authorization.split(" ")[1]
       : next(new Error("Not found Bearer token", "InvalidToken", 400));
 
+    if (!token) {
+      throw new Error("Not found token", "InvalidToken", 400);
+    }
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY || "key");
 
     if (!mongoose.Types.ObjectId.isValid(decoded.id)) {
@@ -34,7 +36,6 @@ const authenticate = async (req, res, next) => {
     // if (!user.isAdmin) {
     //   next(new Error("No permission, you are not an admin", "NotAdmin", 403));
     // }
-
     req.user = user;
     next();
   } catch (err) {

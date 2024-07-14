@@ -1,12 +1,13 @@
 import express from "express";
 import usersController from "../controllers/usersController.js";
 import authenticate from "../middlewares/authenticate.js";
+// import authenticateAdmin from "../middlewares/authenticateAdmin.js";
 
 const C = usersController;
 
 const userRoute = express.Router();
 
-userRoute.get("/", C.getUsers);
+userRoute.get("/", authenticate, C.getUsers);
 
 userRoute.get("/:id", authenticate, C.getUserById);
 
@@ -16,10 +17,6 @@ userRoute.post("/login", C.loginUser);
 
 userRoute.patch("/:id", authenticate, C.updateUsers);
 
-userRoute.delete("/:id", C.deleteUsers);
+userRoute.delete("/:id", authenticate, C.deleteUsers);
 
 export default userRoute;
-
-//check token 1
-// query email in data base if user.email == database.email
-//

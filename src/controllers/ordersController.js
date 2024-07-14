@@ -26,9 +26,17 @@ const orderController = {
   },
 
   createOrder: async (req, res, next) => {
+    const data = req.body;
     try {
-      const data = await orderService.createOrder(req.body);
-      return res.status(201).json({ message: "Order created", data });
+      const order = await orderService.createOrder(data);
+      if (!order) {
+        const error = new Error("Order/Cart failed to create");
+        error.statusCode = 400;
+        return next(error);
+      }
+      return res
+        .status(201)
+        .json({ message: "Order created", order: order, cart: order._id });
     } catch (error) {
       next(error);
     }
@@ -38,32 +46,20 @@ const orderController = {
     try {
       const { id } = req.params;
       const updateData = req.body;
-      const data = await orderService.updateOrderById(id, updateData);
+      const source = req.headers.source;
+      const data = await orderService.updateOrderById(id, updateData, source);
       if (!data) {
-        const error = new Error("Order not found");
+        const error = new Error("Controller: Order not found");
         error.statusCode = 404;
         return next(error);
       }
-      return res.status(200).json({ message: "Update successful" });
+      return res.status(200).json({ message: "Update successful", data: data });
     } catch (error) {
       next(error);
     }
   },
-
-    createOrder: async (req, res, next) => {
-    try {
-      const {id } = req.query;
-      const updateData = req.body;
-      const data = await orderService.createOrderById(req, res);
-      // if (!data) {
-      //   const error = new Error("Order not found 59");
-      //   error.statusCode = 404;
-      //   return next(error);
-      // }
-      // return res.status(200).json({ message: "Update successful" });
-    } catch (error) {
-    }
-  }
 };
+ 
+
 
 export default orderController;
