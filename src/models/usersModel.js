@@ -4,7 +4,7 @@ const usersSchema = new mongoose.Schema(
   {
     googleId: { type: String, default: null }, // Add this line
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: function() { return !this.googleId; } }, // Conditional required
+    password: { type: String, required: false },
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     status: { type: String, default: "active" },

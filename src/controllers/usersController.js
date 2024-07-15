@@ -2,6 +2,13 @@ import { Orders } from "../models/ordersModel.js";
 import { Users } from "../models/usersModel.js";
 import userService from "../services/usersServices.js";
 import utils from "../utils/index.js";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+import { OAuth2Client } from "google-auth-library";
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+dotenv.config();
 
 const usersController = {
   getUsers: async (req, res, next) => {
@@ -34,6 +41,58 @@ const usersController = {
     } catch (error) {
       next(error);
     }
+  },
+
+  googleLogin: async (req, res, next) => {
+    const { token } = req.body;
+
+    try {
+      if (!token) {
+        const error = new Error("Token not found");
+        error.statusCode = 404;
+        return next(error);
+      }
+
+      const ticket = await client.verifyIdToken({
+        idToken: token,
+        audience: process.env.GOOGLE_CLIENT_ID,
+      });
+
+      const payload = ticket.getPayload();
+
+      let user = await userService.findByEmail(payload.email);
+      if (!user) {
+        user = await userService.createUser({
+          googleId: payload.sub,
+          email: payload.email,
+          firstName: payload.given_name,
+          lastName: payload.family_name,
+        });
+      }
+
+      const ourToken = utils.jwt.sign({
+        id: user._id,
+        email: user.email,
+        isAdmin: user.isAdmin,
+      });
+    console.log("78",user)
+    const checkId = user._id.toString();
+      const checkUserCart = await Orders.findOne({
+        user_id: checkId,
+        status: "pending",
+      }).select("_id");
+    console.log("84",checkUserCart)
+      
+      res.status(200).json({
+        message: "Login Successful",
+        email: user.email,
+        id: user._id,
+        isAdmin: user.isAdmin,
+        firstName: user.firstName,
+        cart: checkUserCart ? checkUserCart._id : "No_cart",
+        token: ourToken,
+      });
+    } catch (error) {}
   },
 
   loginUser: async (req, res, next) => {
