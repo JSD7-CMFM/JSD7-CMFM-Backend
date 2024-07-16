@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import { Users } from "../models/usersModel.js";
 import { mongoose } from "mongoose";
 
+
 const authenticate = async (req, res, next) => {
   try {
     if (!req?.headers?.authorization) {

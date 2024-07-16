@@ -8,6 +8,8 @@ import productRoute from "../../src/routes/productRoutes.js";
 import orderRoute from "../../src/routes/orderRoutes.js";
 import mailRoute from "../routes/mailRoutes.js";
 import errorMiddleware from "../middlewares/errorHandling.js";
+import passport from "passport";
+import "../config/passport.js"; // Import passport configuration
 
 const restApiServer = (app) => {
   const corsOptions = {
@@ -22,6 +24,8 @@ const restApiServer = (app) => {
   app.use(express.json());
   app.use(bodyParser.json());
   app.use(cookieParser());
+
+  app.use(passport.initialize());
 
   app.use("/chat", chatRoute);
   app.use("/users", userRoute);
