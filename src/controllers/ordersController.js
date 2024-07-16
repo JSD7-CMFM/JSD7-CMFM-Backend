@@ -4,6 +4,12 @@ const orderController = {
   getOrders: async (req, res, next) => {
     try {
       const data = await orderService.getAllOrders();
+      if (!data) {
+        const error = new Error("Order not found");
+        error.message = "Order not found";
+        error.statusCode = 404;
+        return next(error);
+      }
       return res.status(200).json(data);
     } catch (error) {
       next(error);
@@ -16,6 +22,7 @@ const orderController = {
       const data = await orderService.getOrderById(id);
       if (!data) {
         const error = new Error("Order not found");
+        error.message = "Order not found";
         error.statusCode = 404;
         return next(error);
       }
@@ -31,6 +38,7 @@ const orderController = {
       const order = await orderService.createOrder(data);
       if (!order) {
         const error = new Error("Order/Cart failed to create");
+        error.message = "Order/Cart failed to create";
         error.statusCode = 400;
         return next(error);
       }
@@ -50,6 +58,7 @@ const orderController = {
       const data = await orderService.updateOrderById(id, updateData, source);
       if (!data) {
         const error = new Error("Controller: Order not found");
+        error.message = "Order not found";
         error.statusCode = 404;
         return next(error);
       }
@@ -59,7 +68,5 @@ const orderController = {
     }
   },
 };
- 
-
 
 export default orderController;

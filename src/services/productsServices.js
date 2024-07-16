@@ -3,17 +3,26 @@ import { mongoose } from "mongoose";
 
 const productServices = {
   async getAllProducts(req, res) {
-    let { limit, page, search } = req.query;
+    let { limit, page, search, type } = req.query;
     limit = parseInt(limit);
     page = parseInt(page || 1);
     const skip = (page - 1) * limit;
-    const response = await Products.find({
-      name: { $regex: search || "", $options: "i" },
-    })
+    let query = {};
+    if (type === "All") {
+      query = {
+        name: { $regex: search || "", $options: "i" },
+      };
+    } else if (type && type !== "All") {
+      query = {
+        name: { $regex: search || "", $options: "i" },
+        type: type,
+      };
+    }
+    const response = await Products.find(query)
       .skip(skip)
       .limit(limit || 12);
     let count;
-    if (search) {
+    if (search || type !== "All") {
       count = response.length;
     } else {
       count = await Products.countDocuments();
