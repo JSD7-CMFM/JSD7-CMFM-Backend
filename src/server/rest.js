@@ -11,10 +11,13 @@ import errorMiddleware from "../middlewares/errorHandling.js";
 
 const restApiServer = (app) => {
   const corsOptions = {
-    origin: ['http://localhost:5173', 'https://jsd-7-cmfm-frontend.vercel.app'],
+    origin: [
+      "http://localhost:5173",
+      "https://jsd-7-cmfm-frontend.vercel.app",
+      "https://jsd-7-cmfm-frontend-ponymart.vercel.app",
+    ],
     credentials: true,
   };
-// test
   app.use(cors(corsOptions));
   app.use(express.json());
   app.use(bodyParser.json());
