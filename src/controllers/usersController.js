@@ -75,13 +75,11 @@ const usersController = {
         email: user.email,
         isAdmin: user.isAdmin,
       });
-    console.log("78",user)
     const checkId = user._id.toString();
       const checkUserCart = await Orders.findOne({
         user_id: checkId,
         status: "pending",
       }).select("_id");
-    console.log("84",checkUserCart)
       
       res.status(200).json({
         message: "Login Successful",
