@@ -6,3 +6,4 @@ export const sign = (payload) => {
         expiresIn: process.env.JWT_EXPIRES || "1d",
     });
 };
+//test

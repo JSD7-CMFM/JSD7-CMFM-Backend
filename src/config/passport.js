@@ -1,6 +1,9 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import { Users } from "../models/usersModel.js"; // ใช้ named import
+import { Users } from "../models/usersModel.js";
+import dotenv from "dotenv";
+
+dotenv.config(); // เพิ่มบรรทัดนี้เพื่อโหลดค่าตัวแปรสภาพแวดล้อมจากไฟล์ .env
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -8,7 +11,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
   try {
-    const user = await Users.findById(id); // ใช้ named import Users
+    const user = await Users.findById(id);
     done(null, user);
   } catch (err) {
     done(err, null);
@@ -25,9 +28,9 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       const { id, emails, name } = profile;
       try {
-        let user = await Users.findOne({ googleId: id }); // ใช้ named import Users
+        let user = await Users.findOne({ googleId: id });
         if (!user) {
-          user = await Users.create({ // ใช้ named import Users
+          user = await Users.create({
             googleId: id,
             email: emails[0].value,
             firstName: name.givenName,
