@@ -3,7 +3,6 @@
 // import restApiServer from "./src/server/rest.js";
 // import mongoose from "mongoose";
 
-
 // const app = express();
 // const port = process.env.PORT;
 // const mongourl = process.env.MONGO_URI;
@@ -39,7 +38,14 @@ mongoose.connect(mongourl, {
   useUnifiedTopology: true,
 })
   .then(() => console.log('MongoDB connected'))
-  .catch(err => console.log('MongoDB connection error:', err));
+  .catch(err => {
+    console.error('MongoDB connection error:', err);
+    process.exit(1);
+  });
+
+app.get("/", (req, res) => {
+  res.send("Welcome to the API!");
+});
 
 restApiServer(app);
 
